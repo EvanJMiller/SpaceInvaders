@@ -1,26 +1,41 @@
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.ImageObserver;
 
 public class Defender {
+
     private static final int Y = 330;
     private static final int WIDTH = 60;
     private static final int HEIGHT = 10;
     int x = 0;
     int xa = 0;
     private Game game;
+    private Image defender;
+
+    private void loadImage() {
+        ImageIcon ii = new ImageIcon("player.png");
+        defender = ii.getImage();
+    }
 
     public Defender(Game game) {
         this.game = game;
+        loadImage();
     }
 
     public void move() {
-        if (x + xa > 0 && x + xa < game.getWidth() - WIDTH)
-            x = x + 3*xa;
+        if (x + xa > 0 && x + xa < game.getWidth() - defender.getWidth(null))
+            x = x + 2*xa;
     }
 
-    public void paint(Graphics2D g) {
-        g.fillRect(x, Y, WIDTH, HEIGHT);
+
+    private void drawDefender(Graphics g) {
+        g.drawImage(defender, x, game.getHeight() - defender.getHeight(null) - 20 , null);
+        Toolkit.getDefaultToolkit().sync();
+    }
+
+    public void paint(Graphics g){
+        drawDefender(g);
     }
 
     public void keyReleased(KeyEvent e) {
