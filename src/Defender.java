@@ -1,20 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.image.ImageObserver;
 
 public class Defender {
 
-    private static final int Y = 330;
-    private static final int WIDTH = 60;
-    private static final int HEIGHT = 10;
     int x = 0;
     int xa = 0;
     private Game game;
     private Image defender;
 
     private void loadImage() {
-        ImageIcon ii = new ImageIcon("player.png");
+        ImageIcon ii = new ImageIcon("defender.png");
         defender = ii.getImage();
     }
 
@@ -47,13 +43,5 @@ public class Defender {
             xa = -1;
         if (e.getKeyCode() == KeyEvent.VK_RIGHT)
             xa = 1;
-    }
-
-    public Rectangle getBounds() {
-        return new Rectangle(x, Y, WIDTH, HEIGHT);
-    }
-
-    public int getTopY() {
-        return Y;
     }
 }
