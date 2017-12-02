@@ -3,13 +3,14 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class Defender {
+public class Defender implements Features {
 
     int x = 0;
     int xa = 0;
     private Game game;
     private Image defender;
     ArrayList<Shot> shot = new ArrayList<Shot>();
+    private double LastShot = System.nanoTime();
 
     private void loadImage() {
         ImageIcon ii = new ImageIcon("defender.png");
@@ -51,7 +52,10 @@ public class Defender {
             xa = 0;
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE){
-            shot.add(new Shot(game,x + defender.getWidth(null)/2,game.getHeight() - defender.getHeight(null) - 20));
+            if((System.nanoTime()-LastShot) / 1000000 > DEF_RATE_OF_FIRE) {
+                shot.add(new Shot(game, x + defender.getWidth(null) / 2, game.getHeight() - defender.getHeight(null) - 20));
+                LastShot = System.nanoTime();
+            }
         }
     }
 
