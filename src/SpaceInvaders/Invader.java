@@ -1,3 +1,5 @@
+package SpaceInvaders;
+
 import javax.swing.*;
 import java.awt.*;
 

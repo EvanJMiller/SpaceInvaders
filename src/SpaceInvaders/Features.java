@@ -1,3 +1,5 @@
+package SpaceInvaders;
+
 public interface Features {
 
     /* ---------------------------------------- Required Variable ------------------------------------------- */

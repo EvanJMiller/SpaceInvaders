@@ -1,9 +1,12 @@
+package SpaceInvaders;
+
+import SpaceInvaders.GameObject;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class Defender {
+public class Defender extends GameObject {
 
     int x = 0;
     int xa = 0;
@@ -26,13 +29,17 @@ public class Defender {
             x = x + 2*xa;
     }
 
-    private void drawDefender(Graphics g) {
+    public void render(Graphics g) {
         g.drawImage(defender, x, game.getHeight() - defender.getHeight(null) - 20 , null);
         Toolkit.getDefaultToolkit().sync();
     }
 
+    public void update(){
+        if (x + xa > 0 && x + xa < game.getWidth() - defender.getWidth(null))
+            x = x + 2*xa;
+    }
     public void paint(Graphics g){
-        drawDefender(g);
+        render(g);
             for(Shot s: shot){
                 if (s.y > 0) {
                     s.paint(g);
