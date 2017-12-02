@@ -6,10 +6,12 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class Defender extends GameObject {
+public class Defender extends GameObject implements Features {
 
-    int x = 0;
-    int xa = 0;
+    int x = getX();
+    int xa = getDy();
+    Window w;
+    Handler h;
     private Game game;
     private Image defender;
     ArrayList<Shot> shot = new ArrayList<Shot>();
@@ -19,35 +21,27 @@ public class Defender extends GameObject {
         defender = ii.getImage();
     }
 
-    public Defender(Game game) {
-        this.game = game;
+    public Defender(Window w, Handler h) {
+        this.w = w;
+        this.h = h;
         loadImage();
     }
 
-    public void move() {
-        if (x + xa > 0 && x + xa < game.getWidth() - defender.getWidth(null))
-            x = x + 2*xa;
-    }
-
-    public void render(Graphics g) {
-        g.drawImage(defender, x, game.getHeight() - defender.getHeight(null) - 20 , null);
-        Toolkit.getDefaultToolkit().sync();
-    }
-
     public void update(){
-        if (x + xa > 0 && x + xa < game.getWidth() - defender.getWidth(null))
-            x = x + 2*xa;
+        if (x + xa > 0 && x + xa < w.getWindowWidth() - defender.getWidth(null))
+            x = x + SPEED_OF_DEFENDER*xa;
     }
-    public void paint(Graphics g){
-        render(g);
-            for(Shot s: shot){
+    public void render(Graphics g){
+        g.drawImage(defender, x, w.getWindowHeight() - defender.getHeight(null) - 20 , null);
+        Toolkit.getDefaultToolkit().sync();
+        /*    for(Shot s: shot){
                 if (s.y > 0) {
-                    s.paint(g);
-                    s.move();
+                    s.render(g);
+                    s.update();
                 } else {
                     s = null;   // dereferences shot so gc can delete it
                 }
-            }
+            } */
     }
 
     public void keyReleased(KeyEvent e) {
@@ -58,7 +52,7 @@ public class Defender extends GameObject {
             xa = 0;
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE){
-            shot.add(new Shot(game,x + defender.getWidth(null)/2,game.getHeight() - defender.getHeight(null) - 20));
+            h.addObject(new Shot(game,x + defender.getWidth(null)/2,game.getHeight() - defender.getHeight(null) - 20));
         }
     }
 

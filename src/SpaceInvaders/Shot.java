@@ -2,8 +2,9 @@ package SpaceInvaders;
 
 import javax.swing.*;
 import java.awt.*;
+import SpaceInvaders.GameObject;
 
-public class Shot implements Features{
+public class Shot extends GameObject implements Features{
 
     private Game game;
     private Image shot;
@@ -25,12 +26,12 @@ public class Shot implements Features{
         shot = ii.getImage();
     }
 
-    public void move(){
+    public void update(){
         y = y + ya;
     }
 
     /** updates defender graphics */
-    public void paint(Graphics g){
+    public void render(Graphics g){
         g.drawImage(shot,x,y,null);
         Toolkit.getDefaultToolkit().sync();
     }

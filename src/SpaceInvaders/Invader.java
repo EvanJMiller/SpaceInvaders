@@ -2,14 +2,13 @@ package SpaceInvaders;
 
 import javax.swing.*;
 import java.awt.*;
+import SpaceInvaders.GameObject;
+import SpaceInvaders.Window;
 
-public class Invader implements Features {
+public class Invader extends GameObject implements Features {
 
-    private Game game;
+    private Window w;
     private Image invader;
-    int x;
-    int y;
-    int dy = 0;
     int i;
     int width;
     int height;
@@ -19,12 +18,13 @@ public class Invader implements Features {
     double startTime;
     int yUpdated = 1;
 
-    public Invader(Game game, int x, int y){
-        this.game = game;
-        this.x = x;
-        this.y = y;
+    public Invader(Window w, int x, int y){
+        this.w = w;
+        setX(x);
+        setY(y);
         loadImage();
         startTime = System.nanoTime();
+        objectType = GameObjectType.INVADER;
     }
 
     private void loadImage() {
@@ -32,7 +32,7 @@ public class Invader implements Features {
         invader = ii.getImage();
     }
 
-    public void move() {
+    public void update() {
         if((System.nanoTime()-startTime)/1000000 > 1000 * RATE_OF_INVADERS / 16){
             if (left == 1) {
                 if(yUpdated == 1){
@@ -45,7 +45,7 @@ public class Invader implements Features {
                     startTime = System.nanoTime();
                 }
                 else {
-                    dy += Y_MOVE_INVADERS;
+                    setDy(Y_MOVE_INVADERS);
                     yUpdated = 1;
                 }
             }
@@ -60,7 +60,7 @@ public class Invader implements Features {
                     startTime = System.nanoTime();
                 }
                 else {
-                    dy += Y_MOVE_INVADERS;
+                    setDy(Y_MOVE_INVADERS);
                     yUpdated = 1;
                 }
             }
@@ -68,10 +68,10 @@ public class Invader implements Features {
 
     }
 
-    public void paint(Graphics g){
-        width = game.getWidth() / INVADER_SPACING_X;
-        height = game.getHeight() / INVADER_SPACING_Y;
-        g.drawImage(invader,game.getWidth()/2 + x*width/ROWS_OF_INVADERS + pos*X_MOVE_INVADERS, 50 + y*height/(ROWS_OF_INVADERS) + dy,null);
+    public void render(Graphics g){
+        width = w.getWindowWidth() / INVADER_SPACING_X;
+        height = w.getWindowHeight() / INVADER_SPACING_Y;
+        g.drawImage(invader, w.getWindowWidth()/2 + getX()*width/ROWS_OF_INVADERS + pos*X_MOVE_INVADERS, 50 + getY()*height/(ROWS_OF_INVADERS) + getDy(),null);
         Toolkit.getDefaultToolkit().sync();
     }
 

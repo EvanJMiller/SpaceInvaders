@@ -10,31 +10,24 @@ import javax.swing.JPanel;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Game extends JPanel implements Features {
+import SpaceInvaders.Window;
+import SpaceInvaders.Handler;
 
-    public Defender defender = new Defender(this);
-    ArrayList<Barrier> barrier = new ArrayList<>();
-    ArrayList<Invader> invaders = new ArrayList<>();
+public class Game extends JPanel implements Runnable, Features {
 
-    /*
-
+    Window w;
     private Thread thread; // thread to be used later
     private boolean running; //is the program running
-
-    public Game(){
-
-    initUI() - He has a window class but this should work
-    Handler = new handler();
-
-    }
+    Handler h;
 
     public synchronized void start(){
 
-        Thread t = new Thread(this);
+        thread = new Thread(this);
         thread.start();
         running  = true;
 
     }
+
     public synchronized void stop(){
         try{
             thread.join();
@@ -45,37 +38,34 @@ public class Game extends JPanel implements Features {
         }
 
     }
-    //ALREADY IMPLEMENTED, MAIN GAME LOOP
-    public synchonized void run(){
 
-    }
-
-
-
-
-     */
 
     /** Constructor for game, builds all essential UI elements */
-    public Game (){
-        initUI();           // creates window
+    public Game (){ 
+        //initUI();           // creates window
+        start();
+        w = new Window(this);
         getKeyboardInput(); // gets user input
-        createObjects();
+        h = new Handler();
+        createObjects(h);
     }
 
-    public void createObjects(){
-        defender = new Defender(this);
+    public void createObjects(Handler h){
+        h.addObject(new Defender(w,h));
 
         for(int i = 1; i < 4; i++) {
             for(int x = -2; x < 2; x++) {
                 for (int y = 0; y < 4; y++) {
-                    barrier.add(new Barrier(this, x, y, i));
+                    h.addObject(new Barrier(w, x, y, i));
                 }
             }
         }
 
         for(int x = -COLS_OF_INVADERS/2; x <= COLS_OF_INVADERS/2; x++) {
             for (int y = 0; y < ROWS_OF_INVADERS; y++) {
-                invaders.add(new Invader(this, x, y));
+
+                h.addObject(new Invader(w, x, y));
+
             }
         }
 
@@ -90,27 +80,18 @@ public class Game extends JPanel implements Features {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                defender.keyReleased(e);
+                h.getDefender().keyReleased(e);
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-                defender.keyPressed(e);
+                h.getDefender().keyPressed(e);
             }
         });
         setFocusable(true);
     }
 
     /** initUI creates a window with a black background called Space SpaceInvaders.SpaceInvaders.Invader, which is maximized at startup */
-    public void initUI(){
-        JFrame frame = new JFrame("Space Invaders");
-        frame.add(this);
-        frame.setSize(300, 400);
-        frame.setVisible(true);
-        setBackground(Color.black);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
 
     /* updates graphics on screen */
     public void paint(Graphics g) {
@@ -118,18 +99,8 @@ public class Game extends JPanel implements Features {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        defender.paint(g2d);
-        for(Barrier b: barrier){
-            if(b != null){
-                b.paint(g2d);
-            }
-        }
-        for(Invader i: invaders){
-            if(i != null){
-                i.paint(g2d);
-            }
-        }
     }
+
     public synchronized void run()
     {
         long lastLoopTime = System.nanoTime();
@@ -140,7 +111,7 @@ public class Game extends JPanel implements Features {
         long lastFpsTime = 0;
         long fps = 0;
         // keep looping round til the game ends
-        while (gameRunning)
+        while (running)
         {
             // work out how long its been since the last update, this
             // will be used to calculate how far the entities should
@@ -164,10 +135,10 @@ public class Game extends JPanel implements Features {
             }
 
             // update the game logic
-            //doGameUpdates(delta);
+            //h.update(g);
 
             // draw everyting
-            //render();
+            //h.render(g);
 
             // we want each frame to take 10 milliseconds, to do this
             // we've recorded when we started the frame. We add 10 milliseconds
@@ -183,20 +154,8 @@ public class Game extends JPanel implements Features {
         }
     }
     /** moves all objects in the game */
-    private void move() {
-        defender.move();
-        for(Invader i : invaders) {
-            i.move();
-        }
-    }
 
     public static void main(String[] args) throws InterruptedException {
         Game game = new Game();
-
-        while (true) {
-            game.move();
-            game.repaint();
-            Thread.sleep(10); // must be included so that OS can use threads
-        }
     }
 }

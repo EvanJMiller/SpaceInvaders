@@ -11,6 +11,7 @@ public interface Features {
 
     /* ------------------------------------------ Other Variables -------------------------------------------- */
 
+    public static final int SPEED_OF_DEFENDER = 4;
     public static final int INVADER_SPACING_X = 4;  // the large the number the smaller the spacing (Suggested 4)
     public static final int INVADER_SPACING_Y = 2;  // the large the number the smaller the spacing (Suggested 4)
     public static final int X_MOVE_INVADERS   = 15;

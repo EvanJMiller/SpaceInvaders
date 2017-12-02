@@ -2,19 +2,20 @@ package SpaceInvaders;
 
 import javax.swing.*;
 import java.awt.*;
+import SpaceInvaders.GameObject;
 
-public class Barrier {
+public class Barrier extends GameObject {
 
-    private Game game;
+    private Window w;
     private Image barrier;
     int x;
     int y;
     int i;
 
-    public Barrier(Game game, int x, int y, int i) {
-        this.game = game;
-        this.x = x;
-        this.y = y;
+    public Barrier(Window w, int x, int y, int i) {
+        this.w = w;
+        setX(x);
+        setY(y);
         this.i = i;
         loadImage();
     }
@@ -25,9 +26,11 @@ public class Barrier {
         barrier = ii.getImage();
     }
 
+    public void update(){}
+
     /** updates defender graphics */
-    public void paint(Graphics g){
-        g.drawImage(barrier, game.getWidth()*i/4 - x * barrier.getWidth(null), game.getHeight() - barrier.getHeight(null) - 50 - y*barrier.getHeight(null),null);
+    public void render(Graphics g){
+        g.drawImage(barrier, w.getWindowWidth()*i/4 - x * barrier.getWidth(null), w.getWindowHeight() - barrier.getHeight(null) - 50 - y*barrier.getHeight(null),null);
         Toolkit.getDefaultToolkit().sync();
     }
 
