@@ -5,9 +5,15 @@ public class Barrier {
 
     private Game game;
     private Image barrier;
+    int x;
+    int y;
+    int i;
 
-    public Barrier(Game game) {
+    public Barrier(Game game, int x, int y, int i) {
         this.game = game;
+        this.x = x;
+        this.y = y;
+        this.i = i;
         loadImage();
     }
 
@@ -19,13 +25,7 @@ public class Barrier {
 
     /** updates defender graphics */
     public void paint(Graphics g){
-        for(int i = 1; i < 4; i++){
-            for(int x = -2; x < 2; x++){
-                for(int y = 0; y < 4; y++){
-                    g.drawImage(barrier, game.getWidth()*i/4 - x * barrier.getWidth(null), game.getHeight() - barrier.getHeight(null) - 50 - y*barrier.getHeight(null),null);
-                }
-            }
-        }
+        g.drawImage(barrier, game.getWidth()*i/4 - x * barrier.getWidth(null), game.getHeight() - barrier.getHeight(null) - 50 - y*barrier.getHeight(null),null);
         Toolkit.getDefaultToolkit().sync();
     }
 
